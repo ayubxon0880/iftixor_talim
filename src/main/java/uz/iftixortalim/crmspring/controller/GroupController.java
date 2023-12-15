@@ -31,9 +31,20 @@ public class GroupController {
     public ResponseEntity<GroupDTO> getById(@PathVariable Long id){
         return groupService.getById(id);
     }
+
+    @GetMapping("/direction/{direction}")
+    public ResponseEntity<GroupDTO> getByDirection(@PathVariable String direction){
+        return groupService.getByDirection(direction);
+    }
+
     @GetMapping
     public ResponseEntity<List<GroupSmallDTO>> getByAll(){
         return groupService.getByAll();
+    }
+
+    @GetMapping("/teacher")
+    public ResponseEntity<List<GroupSmallDTO>> getByTeacherId(){
+        return groupService.getByTeacherId();
     }
 
     @PutMapping

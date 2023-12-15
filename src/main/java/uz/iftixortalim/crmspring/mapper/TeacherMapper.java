@@ -2,7 +2,14 @@ package uz.iftixortalim.crmspring.mapper;
 
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.TeacherDTOSave;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
+import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Teacher;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherMapper {
@@ -11,8 +18,7 @@ public class TeacherMapper {
         return new TeacherDTO(
                 teacher.getId(),
                 teacher.getFullName(),
-                teacher.getPhone(),
-                teacher.getSalary()
+                teacher.getPhone()
         );
     }
 
@@ -21,8 +27,7 @@ public class TeacherMapper {
         return new Teacher(
                 teacherDTO.getId(),
                 teacherDTO.getFullName(),
-                teacherDTO.getPhone(),
-                teacherDTO.getSalary()
+                teacherDTO.getPhone()
         );
     }
 }

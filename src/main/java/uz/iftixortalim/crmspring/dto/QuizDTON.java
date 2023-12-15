@@ -23,13 +23,13 @@ public class QuizDTON {
     private Long studentId;
     @NotNull
     private Long groupId;
-    @NotNull
+    @Null
     private LocalDate quizDate;
     @NotNull
     private Integer testCount;
     @NotNull
     private Integer correctAnswer;
-    @NotNull
+    @Null
     private Integer wrongAnswer;
     @NotNull
     private String degree;

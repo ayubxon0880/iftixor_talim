@@ -17,4 +17,8 @@ public interface GroupService {
     ResponseEntity<ApiResponse> delete(Long id);
 
     ResponseEntity<List<GroupSmallDTO>> getByAll();
+
+    ResponseEntity<List<GroupSmallDTO>> getByTeacherId();
+
+    ResponseEntity<GroupDTO> getByDirection(String direction);
 }

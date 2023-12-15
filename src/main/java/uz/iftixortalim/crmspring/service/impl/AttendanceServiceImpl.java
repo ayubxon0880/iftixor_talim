@@ -43,7 +43,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate last = LocalDate.of(year, Month.DECEMBER, 31);
 
-        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId,first,last);
+        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, first, last);
         AttendanceType attendanceType = new AttendanceType();
         List<AttendanceBig> list = attendanceType.add(attendanceList);
         return ResponseEntity.ok(list);
@@ -57,8 +57,19 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public ResponseEntity<ApiResponse> save(AttendanceForSave attendances) {
+        if (attendanceRepository.existsAttendanceByAttendanceDateAndGroupId(
+                LocalDate.now(ZoneId.of(ZONE)),
+                attendances.getGroupId()
+        )) {
+            return ResponseEntity.status(403).body(ApiResponse.builder().status(403).message("Davomat qilingan").success(false).build());
+        }
+
         Group group = groupRepository.findById(attendances.getGroupId()).orElseThrow(() -> new NotFoundException("Gurux topilmadi"));
-        Map<Long, String> map = attendances.getAttendances();
+        List<SmallAttendance> smallAttendances = attendances.getAttendances();
+        Map<Long, String> map = new HashMap<>();
+        for (SmallAttendance attendance : smallAttendances) {
+            map.put(attendance.getId(), attendance.getStatus());
+        }
         List<Student> students = studentRepository.findAllById(map.keySet());
         List<Attendance> attendanceList = new ArrayList<>();
         for (Student student : students) {

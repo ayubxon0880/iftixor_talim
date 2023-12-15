@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.config.JwtService;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.UserDTO;
@@ -18,18 +19,21 @@ import uz.iftixortalim.crmspring.exception.AuthenticationException;
 import uz.iftixortalim.crmspring.exception.Messages;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
+import uz.iftixortalim.crmspring.mapper.GroupMapper;
 import uz.iftixortalim.crmspring.mapper.StudentMapper;
 import uz.iftixortalim.crmspring.mapper.TeacherMapper;
 import uz.iftixortalim.crmspring.mapper.UserMapper;
+import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Role;
 import uz.iftixortalim.crmspring.model.User;
-import uz.iftixortalim.crmspring.repository.RoleRepository;
-import uz.iftixortalim.crmspring.repository.StudentRepository;
-import uz.iftixortalim.crmspring.repository.TeacherRepository;
-import uz.iftixortalim.crmspring.repository.UserRepository;
+import uz.iftixortalim.crmspring.repository.*;
 import uz.iftixortalim.crmspring.service.AuthenticationService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
+    private final GroupRepository groupRepository;
     private final StudentMapper studentMapper;
     private final TeacherMapper teacherMapper;
     private final UserMapper userMapper;
@@ -80,6 +85,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             student = studentMapper.toDtoForAuth(studentRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
         } else if (role.equals("ROLE_TEACHER")) {
             teacher = teacherMapper.toDto(teacherRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
+            List<Group> groups = groupRepository.findByTeacherId(user.getId());
+            Set<GroupDTOForAuth> list = new HashSet<>();
+            for (Group group : groups) {
+                list.add(new GroupDTOForAuth(group.getId(),group.getDirection()));
+            }
+            teacher.setGroups(list);
         } else if (role.equals("ROLE_ADMIN") || role.equals("ROLE_SUPER_ADMIN")){
             userDTO = userMapper.toDto(userRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
         }

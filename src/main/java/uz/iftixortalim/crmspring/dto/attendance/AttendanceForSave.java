@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -11,5 +12,6 @@ import java.util.Map;
 @Data
 public class AttendanceForSave {
     private Long groupId;
-    private Map<Long,String> attendances;
+    private List<SmallAttendance> attendances;
+//    private String attendances;
 }

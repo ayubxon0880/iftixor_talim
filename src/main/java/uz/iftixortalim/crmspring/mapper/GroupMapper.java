@@ -49,6 +49,7 @@ public class GroupMapper {
         );
     }
 
+
     public GroupSmallDTO toSmallDto(Group group) {
         if (group == null) return null;
         return new GroupSmallDTO(

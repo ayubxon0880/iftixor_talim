@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.group.GroupDTO;
 import uz.iftixortalim.crmspring.dto.group.GroupSmallDTO;
@@ -11,11 +12,14 @@ import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.mapper.GroupMapper;
 import uz.iftixortalim.crmspring.model.Group;
+import uz.iftixortalim.crmspring.model.User;
 import uz.iftixortalim.crmspring.repository.GroupRepository;
 import uz.iftixortalim.crmspring.service.GroupService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +71,23 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public ResponseEntity<List<GroupSmallDTO>> getByAll() {
         return ResponseEntity.ok(groupRepository.findAll(Sort.by("createdAt")).stream().map(groupMapper::toSmallDto).toList());
+    }
+
+    @Override
+    public ResponseEntity<List<GroupSmallDTO>> getByTeacherId() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<GroupSmallDTO> list = null;
+        if (user.getRole().getName().equals("ROLE_TEACHER")) {
+            list =  groupRepository.findByTeacherId(user.getId()).stream().map(groupMapper::toSmallDto).toList();
+        } else if (user.getRole().getName().equals("ROLE_ADMIN") || user.getRole().getName().equals("ROLE_SUERP_ADMIN")) {
+            list = groupRepository.findAll().stream().map(groupMapper::toSmallDto).toList();
+        }
+        return ResponseEntity.ok(list);
+    }
+
+    @Override
+    public ResponseEntity<GroupDTO> getByDirection(String direction) {
+        GroupDTO group = groupMapper.toDto(groupRepository.findByDirection(direction).orElseThrow(() -> new NotFoundException("Gurux topilmadi")));
+        return ResponseEntity.ok(group);
     }
 }

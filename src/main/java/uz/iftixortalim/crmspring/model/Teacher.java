@@ -2,9 +2,12 @@ package uz.iftixortalim.crmspring.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -15,5 +18,4 @@ public class Teacher {
     private Long id;
     private String fullName;
     private String phone;
-    private Double salary;
 }

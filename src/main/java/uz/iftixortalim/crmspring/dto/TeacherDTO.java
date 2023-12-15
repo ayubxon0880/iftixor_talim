@@ -7,8 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.iftixortalim.crmspring.annotations.ValidPassword;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
+import uz.iftixortalim.crmspring.model.Group;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,19 +26,26 @@ public class TeacherDTO {
     private String fullName;
     @NotNull
     private String phone;
-    @NotNull
-    private Double salary;
     @NotNull(groups = OnCreate.class)
     @Null(groups = OnUpdate.class)
     @ValidPassword
     private String password;
     @NotNull
     private String username;
+    private Set<GroupDTOForAuth> groups;
 
-    public TeacherDTO(Long id, String fullName, String phone, Double salary) {
+    public TeacherDTO(Long id, String fullName, String phone, Set<GroupDTOForAuth> groupDTOForAuth) {
         this.id = id;
         this.fullName = fullName;
         this.phone = phone;
-        this.salary = salary;
+        this.groups = groupDTOForAuth;
     }
+
+    public TeacherDTO(Long id, String fullName, String phone) {
+        this.id = id;
+        this.fullName = fullName;
+        this.phone = phone;
+    }
+
+
 }
