@@ -1,39 +1,36 @@
-package uz.iftixortalim.crmspring.dto.group;
+package uz.iftixortalim.crmspring.dto.quiz;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Set;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class GroupDTO {
+@Builder
+public class QuizDTON {
     @NotNull(groups = OnUpdate.class)
     @Null(groups = OnCreate.class)
     private Long id;
     @NotNull
-    private String direction;
+    private Long studentId;
     @NotNull
-    private Double payment;
-    @NotNull
-    private Long teacherId;
-    @NotNull
-    private LocalTime startTime;
-    @NotNull
-    private String days;
-    @NotNull
-    private LocalTime endTime;
+    private Long groupId;
     @Null
-    private LocalDate createdAt;
+    private LocalDate quizDate;
+    @NotNull
+    private Integer testCount;
+    @NotNull
+    private Integer correctAnswer;
     @Null
-    private Set<StudentDTO> students;
+    private Integer wrongAnswer;
+    @NotNull
+    private String degree;
 }

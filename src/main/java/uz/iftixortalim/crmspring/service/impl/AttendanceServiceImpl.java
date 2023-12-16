@@ -28,8 +28,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
-
     private final String ZONE = "Asia/Tokyo";
+
 
     @Override
     public ResponseEntity<List<AttendanceDTO>> readByGroupId(Optional<Integer> year, Optional<Integer> month, Long groupId) {

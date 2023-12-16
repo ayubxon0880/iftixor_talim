@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.group.GroupDTO;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.group.GroupSmallDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.group.OnCreate;
@@ -35,6 +36,11 @@ public class GroupController {
     @GetMapping("/direction/{direction}")
     public ResponseEntity<GroupDTO> getByDirection(@PathVariable String direction){
         return groupService.getByDirection(direction);
+    }
+
+    @GetMapping("/direction-all")
+    public ResponseEntity<List<GroupDTOForAuth>> getByDirection(){
+        return groupService.getByDirectionAll();
     }
 
     @GetMapping

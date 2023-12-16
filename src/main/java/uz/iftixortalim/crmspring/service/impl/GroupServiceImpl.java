@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.group.GroupDTO;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.group.GroupSmallDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
@@ -87,7 +88,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseEntity<GroupDTO> getByDirection(String direction) {
-        GroupDTO group = groupMapper.toDto(groupRepository.findByDirection(direction).orElseThrow(() -> new NotFoundException("Gurux topilmadi")));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        GroupDTO group = groupMapper.toDto(groupRepository.findByDirectionAndTeacherId(direction,user.getId()).orElseThrow(() -> new NotFoundException("Gurux topilmadi")));
         return ResponseEntity.ok(group);
+    }
+
+    @Override
+    public ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll() {
+        List<GroupDTOForAuth> list = groupRepository.findAll().stream().map(groupMapper::dtoForAuth).toList();
+        return ResponseEntity.ok(list);
     }
 }

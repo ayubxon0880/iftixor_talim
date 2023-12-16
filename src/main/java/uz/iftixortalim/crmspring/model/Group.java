@@ -21,7 +21,6 @@ public class Group {
     private Long id;
     private String direction;
     private Double payment;
-    private String degree;
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;

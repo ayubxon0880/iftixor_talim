@@ -13,5 +13,7 @@ import java.util.Set;
 public interface GroupRepository extends JpaRepository<Group,Long> {
     List<Group> findByTeacherId(Long id);
 
-    Optional<Group> findByDirection(String direction);
+    List<Group> findByDirectionLike(String direction);
+
+    Optional<Group> findByDirectionAndTeacherId(String direction, Long id);
 }

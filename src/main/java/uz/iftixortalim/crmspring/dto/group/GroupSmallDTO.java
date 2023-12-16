@@ -13,7 +13,6 @@ public class GroupSmallDTO {
     private Long id;
     private String direction;
     private Double payment;
-    private String degree;
     private String teacher;
     private String days;
     private LocalTime start;

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.mapper.StudentMapper;
@@ -32,9 +33,12 @@ public class StudentServiceImpl implements StudentService {
     private final GroupRepository groupRepository;
 
     @Override
-    public ResponseEntity<ApiResponse> create(StudentDTO studentDTO) {
+    public ResponseEntity<ApiResponse> create(StudentDTOForSave studentDTO) {
         if (userRepository.existsByUsername(studentDTO.getUsername()))
             throw new AlreadyExists("Student Username already exists");
+
+        studentDTO.setStatus("IN_PROGRESS");
+        Student student = studentMapper.toEntity(studentDTO);
 
         User user = userRepository.save(User
                 .builder()
@@ -44,7 +48,6 @@ public class StudentServiceImpl implements StudentService {
                 .password(passwordEncoder.encode(studentDTO.getPassword()))
                 .build());
         User save = userRepository.save(user);
-        Student student = studentMapper.toEntity(studentDTO);
         student.setId(save.getId());
         studentRepository.save(student);
         return ResponseEntity.ok(ApiResponse.builder().message("Student created").status(201).success(true).build());

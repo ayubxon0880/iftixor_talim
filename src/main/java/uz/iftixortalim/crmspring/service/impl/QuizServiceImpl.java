@@ -4,22 +4,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import uz.iftixortalim.crmspring.dto.QuizDTO;
-import uz.iftixortalim.crmspring.dto.QuizDTON;
+import uz.iftixortalim.crmspring.dto.quiz.QuizDTO;
+import uz.iftixortalim.crmspring.dto.quiz.QuizDTON;
+import uz.iftixortalim.crmspring.dto.quiz.QuizList;
+import uz.iftixortalim.crmspring.dto.Test;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.mapper.QuizMapper;
-import uz.iftixortalim.crmspring.model.Quiz;
-import uz.iftixortalim.crmspring.model.User;
+import uz.iftixortalim.crmspring.model.*;
+import uz.iftixortalim.crmspring.repository.GroupRepository;
 import uz.iftixortalim.crmspring.repository.QuizRepository;
+import uz.iftixortalim.crmspring.repository.StudentRepository;
 import uz.iftixortalim.crmspring.service.QuizService;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
+    private final StudentRepository studentRepository;
+    private final GroupRepository groupRepository;
     private final QuizMapper quizMapper;
+    private final String ZONE = "Asia/Tokyo";
+
+
 
     @Override
     public ResponseEntity<List<QuizDTO>> getByStudentId(Long id) {
@@ -39,9 +53,23 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> save(List<QuizDTON> quizDTOList) {
-        List<Quiz> quizList = quizDTOList.stream().map(quizMapper::toEntity).toList();
-        quizRepository.saveAll(quizList);
+    public ResponseEntity<ApiResponse> save(QuizList quizList) {
+        Map<Long,Integer> testlar = new HashMap<>();
+        Map<Long,String> statuslar = new HashMap<>();
+        for (Test test : quizList.getTests()) {
+            testlar.put(test.getId(),test.getCorrect());
+        }
+        for (Status status : quizList.getStatus()) {
+            statuslar.put(status.getId(), status.getName());
+        }
+        List<Quiz> quizzes = new ArrayList<>();
+        Group group = groupRepository.findById(quizList.getGroupId()).orElseThrow();
+
+        for (Long key: testlar.keySet()) {
+            Student student = studentRepository.findById(key).orElseThrow(() -> new NotFoundException("Student topilmadi"));
+            quizzes.add(new Quiz(null,student,group,LocalDate.now(ZoneId.of(ZONE)), quizList.getTestCount(), testlar.get(key), statuslar.get(key)));
+        }
+        quizRepository.saveAll(quizzes);
         return ResponseEntity.status(201).body(ApiResponse.builder().message("Testlar muvaffaqiyatli qo'shildi").status(201).success(true).build());
     }
 

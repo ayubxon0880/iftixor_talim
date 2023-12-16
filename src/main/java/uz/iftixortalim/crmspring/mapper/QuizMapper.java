@@ -2,12 +2,11 @@ package uz.iftixortalim.crmspring.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.iftixortalim.crmspring.dto.QuizDTO;
-import uz.iftixortalim.crmspring.dto.QuizDTON;
+import uz.iftixortalim.crmspring.dto.quiz.QuizDTO;
+import uz.iftixortalim.crmspring.dto.quiz.QuizDTON;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.model.Quiz;
 import uz.iftixortalim.crmspring.repository.GroupRepository;
-import uz.iftixortalim.crmspring.repository.QuizRepository;
 import uz.iftixortalim.crmspring.repository.StudentRepository;
 
 @Service

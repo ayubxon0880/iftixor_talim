@@ -23,7 +23,6 @@ public class GroupMapper {
                 group.getId(),
                 group.getDirection(),
                 group.getPayment(),
-                group.getDegree(),
                 group.getTeacher().getId(),
                 group.getStartTime(),
                 group.getDays(),
@@ -39,7 +38,6 @@ public class GroupMapper {
                 groupDTO.getId(),
                 groupDTO.getDirection(),
                 groupDTO.getPayment(),
-                groupDTO.getDegree(),
                 teacherRepository.findById(groupDTO.getTeacherId()).orElseThrow(() -> new NotFoundException("Teacher not found")),
                 groupDTO.getDays(),
                 groupDTO.getStartTime(),
@@ -56,11 +54,18 @@ public class GroupMapper {
                 group.getId(),
                 group.getDirection(),
                 group.getPayment(),
-                group.getDegree(),
                 group.getTeacher().getFullName(),
                 group.getDays(),
                 group.getStartTime(),
                 group.getEndTime()
+        );
+    }
+
+    public GroupDTOForAuth dtoForAuth(Group group) {
+        if (group == null) return null;
+        return new GroupDTOForAuth(
+                group.getId(),
+                group.getDirection()
         );
     }
 }

@@ -2,6 +2,7 @@ package uz.iftixortalim.crmspring.service;
 
 import org.springframework.http.ResponseEntity;
 import uz.iftixortalim.crmspring.dto.group.GroupDTO;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.group.GroupSmallDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 
@@ -21,4 +22,6 @@ public interface GroupService {
     ResponseEntity<List<GroupSmallDTO>> getByTeacherId();
 
     ResponseEntity<GroupDTO> getByDirection(String direction);
+
+    ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll();
 }

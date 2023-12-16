@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.iftixortalim.crmspring.annotations.ValidPassword;
-import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.group.GroupDTOForSave;
-import uz.iftixortalim.crmspring.dto.response.AuthenticationRequest;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
 
@@ -18,7 +16,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentDTO {
+public class StudentDTOForSave {
     @NotNull(groups = OnUpdate.class)
     @Null(groups = OnCreate.class)
     private Long id;
@@ -26,13 +24,22 @@ public class StudentDTO {
     private String fullName;
     @NotNull
     private String phone;
+    @Null(groups = OnCreate.class)
     private String status;
     @NotNull
-    private Set<Long> groupId;
+    private List<Long> groups;
     @NotNull(groups = OnCreate.class)
     @Null(groups = OnUpdate.class)
     @ValidPassword
     private String password;
     @NotNull
     private String username;
+
+    public StudentDTOForSave(String fullName, String phone, List<Long> groups, String password, String username) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.groups = groups;
+        this.password = password;
+        this.username = username;
+    }
 }

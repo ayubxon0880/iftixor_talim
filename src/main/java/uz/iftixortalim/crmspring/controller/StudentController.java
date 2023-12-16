@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
 import uz.iftixortalim.crmspring.service.StudentService;
@@ -23,7 +24,7 @@ public class StudentController {
 
     @PostMapping
     @Validated(value = OnCreate.class)
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody StudentDTOForSave studentDTO) {
         return studentService.create(studentDTO);
     }
 

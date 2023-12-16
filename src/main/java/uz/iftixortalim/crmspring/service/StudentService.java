@@ -3,12 +3,13 @@ package uz.iftixortalim.crmspring.service;
 import org.springframework.http.ResponseEntity;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
-    ResponseEntity<ApiResponse> create(StudentDTO studentDTO);
+    ResponseEntity<ApiResponse> create(StudentDTOForSave studentDTO);
 
     ResponseEntity<StudentDTO> getById(Long id);
 

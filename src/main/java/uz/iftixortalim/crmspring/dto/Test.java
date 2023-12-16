@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizSmall {
+public class Test {
     private Long id;
-    private String student;
-    private String group;
-    private Integer testCount;
-    private Integer correctAnswer;
-    private Integer wrongAnswer;
+    private Integer correct;
 }

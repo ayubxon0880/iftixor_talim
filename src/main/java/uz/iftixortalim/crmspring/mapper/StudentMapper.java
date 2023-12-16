@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForAuth;
+import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Student;
@@ -63,6 +64,17 @@ public class StudentMapper {
                 studentDTO.getPhone(),
                 statusRepository.findByName(studentDTO.getStatus()).orElseThrow(()->new NotFoundException("Status not found")),
                 studentDTO.getGroupId().stream().map(it -> groupRepository.findById(it).orElseThrow(() -> new NotFoundException("Group not found"))).collect(Collectors.toSet())
+        );
+    }
+
+    public Student toEntity(StudentDTOForSave studentDTO){
+        if (studentDTO == null) return null;
+        return new Student(
+                studentDTO.getId(),
+                studentDTO.getFullName(),
+                studentDTO.getPhone(),
+                statusRepository.findByName(studentDTO.getStatus()).orElseThrow(()->new NotFoundException("Status not found")),
+                studentDTO.getGroups().stream().map(it -> groupRepository.findById(it).orElseThrow(() -> new NotFoundException("Group not found"))).collect(Collectors.toSet())
         );
     }
 }

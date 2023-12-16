@@ -32,7 +32,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public ResponseEntity<ApiResponse> create(TeacherDTO teacherDTO) {
         if (userRepository.existsByUsername(teacherDTO.getUsername())) {
-            throw new AlreadyExists("Username already exists");
+            throw new AlreadyExists("BU login boshqa foydalanuvchi band qilgan. Iltimos boshqa login tanlang");
         }
         User user = User
                 .builder()
@@ -45,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher teacher = teacherMapper.toEntity(teacherDTO);
         teacher.setId(save.getId());
         teacherRepository.save(teacher);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.builder().status(201).success(true).message("Teacher created").build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.builder().status(201).success(true).message("Ustoz muvaffaqiyatli qo'shildi").build());
     }
 
     @Override

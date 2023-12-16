@@ -22,16 +22,17 @@ public class TeacherDTO {
     @Null(groups = OnCreate.class)
     @NotNull(groups = OnUpdate.class)
     private Long id;
-    @NotNull
+    @NotNull(message = "Ism familiya mavjud emas")
     private String fullName;
-    @NotNull
+    @NotNull(message = "Telefon raqam mavjud emas")
     private String phone;
     @NotNull(groups = OnCreate.class)
     @Null(groups = OnUpdate.class)
     @ValidPassword
     private String password;
-    @NotNull
+    @NotNull(message = "Login mavjud emas")
     private String username;
+    @Null
     private Set<GroupDTOForAuth> groups;
 
     public TeacherDTO(Long id, String fullName, String phone, Set<GroupDTOForAuth> groupDTOForAuth) {
