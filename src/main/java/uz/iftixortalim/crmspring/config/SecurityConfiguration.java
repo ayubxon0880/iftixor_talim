@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -27,7 +28,7 @@ public class SecurityConfiguration {
         http.cors(cors -> {
             cors.configurationSource(request -> {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("https://iftixor-talim-npbopqn9b-ayubxon0880.vercel.app","https://iftixor-talim.vercel.app"));
+                configuration.addAllowedOrigin("*");
                 configuration.setAllowedMethods(List.of("*"));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(List.of("*"));
