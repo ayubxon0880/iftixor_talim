@@ -28,7 +28,7 @@ public class SecurityConfiguration {
         http.cors(cors -> {
             cors.configurationSource(request -> {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.addAllowedOrigin("*");
+                configuration.setAllowedOrigins(List.of("https://crm-react-ebon.vercel.app"));
                 configuration.setAllowedMethods(List.of("*"));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(List.of("*"));
