@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
+import uz.iftixortalim.crmspring.dto.student.StudentSmallDto;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.mapper.StudentMapper;
@@ -91,6 +92,61 @@ public class StudentServiceImpl implements StudentService {
     public ResponseEntity<List<StudentDTO>> getAll(Long groupId, Optional<String> search) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Gurux topilmadi"));
         List<StudentDTO> students = search.map(s -> group.getStudents().stream().filter(it -> it.getFullName().contains(s)).map(studentMapper::toDto).toList()).orElseGet(() -> group.getStudents().stream().map(studentMapper::toDto).toList());
+        return ResponseEntity.ok(students);
+    }
+
+    @Override
+    public ResponseEntity<List<StudentDTOForSave>> readAllByPagination(Optional<Integer> page, Optional<String> studentName) {
+        List<StudentDTOForSave> byPagination = studentRepository
+                .findAllByFullNameLike("%" + studentName.orElse("") + "%")
+                .stream()
+                .map(studentMapper::toSmallDto)
+                .toList();
+//        Pageable pageable = PageRequest.of(page.orElse(1), 3, Sort.by("fullName").descending());
+//        byPagination = studentName.map(s ->
+//                studentRepository
+//                        .findAllByFullNameLike("%" + s + "%", pageable)
+//                        .stream()
+//                        .map(studentMapper::toSmallDto)
+//                        .toList()
+//        ).orElseGet(
+//                () -> studentRepository
+//                        .findAll(pageable)
+//                        .stream()
+//                        .map(studentMapper::toSmallDto)
+//                        .toList()
+//        );
+
+        return ResponseEntity.ok(byPagination);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> addGroup(Long studentId, Long groupId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new NotFoundException("O'quvchi topilmadi"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Guruh topilmadi"));
+        Set<Group> groups = student.getGroups();
+        groups.add(group);
+        student.setGroups(groups);
+        studentRepository.save(student);
+
+        return ResponseEntity.ok(ApiResponse.builder().success(true).status(202).message("O'quvchi guruhga qo'shildi").build());
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> removeFromGroup(Long studentId, Long groupId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new NotFoundException("O'quvchi topilmadi"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Guruh topilmadi"));
+        Set<Group> groups = student.getGroups();
+        groups.remove(group);
+        student.setGroups(groups);
+        studentRepository.save(student);
+
+        return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("O'quvchi guruhdan chiqarildi").build());
+    }
+
+    @Override
+    public ResponseEntity<List<StudentSmallDto>> readAllByName(String studentName) {
+        List<StudentSmallDto> students = studentRepository.findAllByFullNameLike("%" + studentName + "%").stream().map(student -> new StudentSmallDto(student.getId(),student.getFullName())).toList();
         return ResponseEntity.ok(students);
     }
 }

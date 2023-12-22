@@ -42,4 +42,12 @@ public class StudentDTOForSave {
         this.password = password;
         this.username = username;
     }
+
+    public StudentDTOForSave(String fullName, String phone, String status, List<Long> groups, String username) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.status = status;
+        this.groups = groups;
+        this.username = username;
+    }
 }

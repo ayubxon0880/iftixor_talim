@@ -47,4 +47,13 @@ public class AttendanceController {
     }
 
 
+    @GetMapping("/pagination")
+    public ResponseEntity<List<AttendanceDTO>> readAllByPagination(@RequestParam Optional<Integer> page,
+                                                                   @RequestParam Optional<Integer> year,
+                                                                   @RequestParam Optional<Integer> month,
+                                                                   @RequestParam Optional<Integer> studentName){
+        return attendanceService.readAllByPagination(page,year,month,studentName);
+    }
+
+
 }

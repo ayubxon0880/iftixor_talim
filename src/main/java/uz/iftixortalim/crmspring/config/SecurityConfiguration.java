@@ -27,7 +27,7 @@ public class SecurityConfiguration {
         http.cors(cors -> {
             cors.configurationSource(request -> {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("https://iftixor-talim.onrender.com"));
+                configuration.setAllowedOrigins(List.of("http://localhost:3000"));
                 configuration.setAllowedMethods(List.of("*"));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(List.of("*"));
@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 auth -> auth
 //                        .anyRequest()
 //                        .permitAll()
-                        .requestMatchers("/api/v1/auth/**","/api/test/**")
+                        .requestMatchers("/api/v1/auth/**","/api/test/**","/api-docs")
                         .permitAll()
                         .anyRequest()
                         .authenticated()

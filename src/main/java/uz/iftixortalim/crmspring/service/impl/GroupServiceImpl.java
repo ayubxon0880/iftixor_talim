@@ -95,7 +95,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll() {
-        List<GroupDTOForAuth> list = groupRepository.findAll().stream().map(groupMapper::dtoForAuth).toList();
+        List<GroupDTOForAuth> list = groupRepository.findAllGroup();
         return ResponseEntity.ok(list);
     }
 }

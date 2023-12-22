@@ -78,4 +78,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceRepository.saveAll(attendanceList);
         return ResponseEntity.status(201).body(ApiResponse.builder().status(201).message("Davomat qo'shildi").build());
     }
+
+    @Override
+    public ResponseEntity<List<AttendanceDTO>> readAllByPagination(Optional<Integer> page, Optional<Integer> year, Optional<Integer> month, Optional<Integer> studentName) {
+//        attendanceRepository
+        return null;
+    }
 }

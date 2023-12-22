@@ -6,6 +6,7 @@ import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForAuth;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
+import uz.iftixortalim.crmspring.dto.student.StudentSmallDto;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Student;
@@ -56,6 +57,18 @@ public class StudentMapper {
         );
     }
 
+    public StudentDTOForSave toSmallDto(Student student) {
+        if (student == null) return null;
+        return new StudentDTOForSave(
+                student.getFullName(),
+                student.getPhone(),
+                student.getStatus().getName(),
+                student.getGroups().stream().map(Group::getId).toList(),
+                null
+
+        );
+    }
+
     public Student toEntity(StudentDTO studentDTO){
         if (studentDTO == null) return null;
         return new Student(
@@ -77,4 +90,5 @@ public class StudentMapper {
                 studentDTO.getGroups().stream().map(it -> groupRepository.findById(it).orElseThrow(() -> new NotFoundException("Group not found"))).collect(Collectors.toSet())
         );
     }
+
 }
