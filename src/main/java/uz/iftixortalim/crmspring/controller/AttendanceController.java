@@ -37,8 +37,8 @@ public class AttendanceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AttendanceBig>> read(){
-        return attendanceService.read();
+    public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year){
+        return attendanceService.read(year);
     }
 
     @PostMapping("/save")

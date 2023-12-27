@@ -1,5 +1,7 @@
 package uz.iftixortalim.crmspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,11 +21,13 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private Status status;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "student_group",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
+    @ManyToMany(mappedBy = "students")
     private Set<Group> groups;
+
+    public Student(Long id, String fullName, String phone, Status status) {
+        this.id = id;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.status = status;
+    }
 }

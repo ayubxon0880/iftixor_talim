@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class GroupDTOForAuth {
     private Long id;
     private String name;
+    private String teacher;
+    private String phone;
 }

@@ -2,10 +2,8 @@ package uz.iftixortalim.crmspring.service;
 
 import org.springframework.http.ResponseEntity;
 import uz.iftixortalim.crmspring.dto.attendance.AttendanceDTO;
-import uz.iftixortalim.crmspring.dto.student.StudentDTO;
+import uz.iftixortalim.crmspring.dto.student.*;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
-import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
-import uz.iftixortalim.crmspring.dto.student.StudentSmallDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +26,6 @@ public interface StudentService {
     ResponseEntity<ApiResponse> removeFromGroup(Long studentId, Long groupId);
 
     ResponseEntity<List<StudentSmallDto>> readAllByName(String studentName);
+
+    ResponseEntity<StudentDTOForAuth> getMe(Long id);
 }

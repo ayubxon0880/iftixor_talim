@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.attendance.*;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
-import uz.iftixortalim.crmspring.mapper.AttendanceMapper;
 import uz.iftixortalim.crmspring.model.Attendance;
 import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Student;
@@ -37,9 +36,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId) {
-        LocalDate currentDate = LocalDate.now(ZoneId.of(ZONE)); // JST = Asian/Tokyo
-        int year = currentDate.getYear();
+    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId,Integer year) {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate last = LocalDate.of(year, Month.DECEMBER, 31);
 
@@ -50,9 +47,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public ResponseEntity<List<AttendanceBig>> read() {
+    public ResponseEntity<List<AttendanceBig>> read(Integer year) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return readByStudentId(user.getId());
+        return readByStudentId(user.getId(),year);
     }
 
     @Override
@@ -76,7 +73,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceList.add(new Attendance(null, LocalDate.now(), student, group, map.get(student.getId())));
         }
         attendanceRepository.saveAll(attendanceList);
-        return ResponseEntity.status(201).body(ApiResponse.builder().status(201).message("Davomat qo'shildi").build());
+        return ResponseEntity.status(201).body(ApiResponse.builder().status(201).message("Davomat qo'shildi").success(true).build());
     }
 
     @Override

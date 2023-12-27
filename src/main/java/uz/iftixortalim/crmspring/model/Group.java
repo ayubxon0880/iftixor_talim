@@ -1,5 +1,7 @@
 package uz.iftixortalim.crmspring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +30,11 @@ public class Group {
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDate createdAt;
-    @ManyToMany(mappedBy = "groups",fetch = FetchType.EAGER)
+    @ManyToMany
+    @JoinTable(
+            name = "student_group",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
     private List<Student> students;
 }

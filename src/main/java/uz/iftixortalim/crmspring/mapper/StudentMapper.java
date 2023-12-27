@@ -35,6 +35,20 @@ public class StudentMapper {
         );
     }
 
+    public StudentDTO toDto2(Student student){
+        if (student == null) return null;
+
+        return new StudentDTO(
+                student.getId(),
+                student.getFullName(),
+                student.getPhone(),
+                student.getStatus().getName(),
+                null,
+                null,
+                null
+        );
+    }
+
     public StudentDTOForAuth toDtoForAuth(Student student){
         if (student == null) return null;
 
@@ -53,7 +67,9 @@ public class StudentMapper {
         if (group == null) return null;
         return new GroupDTOForAuth(
                 group.getId(),
-                group.getDirection()
+                group.getDirection(),
+                group.getTeacher().getFullName(),
+                group.getTeacher().getPhone()
         );
     }
 
@@ -63,7 +79,7 @@ public class StudentMapper {
                 student.getFullName(),
                 student.getPhone(),
                 student.getStatus().getName(),
-                student.getGroups().stream().map(Group::getId).toList(),
+                null,
                 null
 
         );

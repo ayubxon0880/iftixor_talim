@@ -4,15 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.attendance.AttendanceDTO;
-import uz.iftixortalim.crmspring.dto.student.StudentDTO;
+import uz.iftixortalim.crmspring.dto.student.*;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
-import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
-import uz.iftixortalim.crmspring.dto.student.StudentSmallDto;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
+import uz.iftixortalim.crmspring.model.User;
 import uz.iftixortalim.crmspring.service.StudentService;
 
 import java.util.List;
@@ -46,6 +46,16 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getById(@PathVariable Long id) {
         return studentService.getById(id);
+    }
+
+
+    @GetMapping("/get-me")
+    public ResponseEntity<StudentDTOForAuth> getMe() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user == null){
+            return ResponseEntity.ok(new StudentDTOForAuth());
+        }
+        return studentService.getMe(user.getId());
     }
 
 

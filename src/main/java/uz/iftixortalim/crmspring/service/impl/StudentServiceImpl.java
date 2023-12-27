@@ -1,11 +1,15 @@
 package uz.iftixortalim.crmspring.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.dto.student.StudentDTOForAuth;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForSave;
 import uz.iftixortalim.crmspring.dto.student.StudentSmallDto;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
@@ -14,10 +18,7 @@ import uz.iftixortalim.crmspring.mapper.StudentMapper;
 import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Student;
 import uz.iftixortalim.crmspring.model.User;
-import uz.iftixortalim.crmspring.repository.GroupRepository;
-import uz.iftixortalim.crmspring.repository.RoleRepository;
-import uz.iftixortalim.crmspring.repository.StudentRepository;
-import uz.iftixortalim.crmspring.repository.UserRepository;
+import uz.iftixortalim.crmspring.repository.*;
 import uz.iftixortalim.crmspring.service.StudentService;
 
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public class StudentServiceImpl implements StudentService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private final StudentMapper studentMapper;
     private final PasswordEncoder passwordEncoder;
     private final GroupRepository groupRepository;
@@ -90,32 +92,33 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseEntity<List<StudentDTO>> getAll(Long groupId, Optional<String> search) {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Gurux topilmadi"));
-        List<StudentDTO> students = search.map(s -> group.getStudents().stream().filter(it -> it.getFullName().contains(s)).map(studentMapper::toDto).toList()).orElseGet(() -> group.getStudents().stream().map(studentMapper::toDto).toList());
-        return ResponseEntity.ok(students);
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Guruh topilmadi"));
+        List<Student> studentList = studentRepository.findByGroupsContains(group);
+        List<StudentDTO> list = studentList.stream().map(studentMapper::toDto2).toList();
+        return ResponseEntity.ok(list);
     }
 
     @Override
     public ResponseEntity<List<StudentDTOForSave>> readAllByPagination(Optional<Integer> page, Optional<String> studentName) {
-        List<StudentDTOForSave> byPagination = studentRepository
-                .findAllByFullNameLike("%" + studentName.orElse("") + "%")
-                .stream()
-                .map(studentMapper::toSmallDto)
-                .toList();
-//        Pageable pageable = PageRequest.of(page.orElse(1), 3, Sort.by("fullName").descending());
-//        byPagination = studentName.map(s ->
-//                studentRepository
-//                        .findAllByFullNameLike("%" + s + "%", pageable)
-//                        .stream()
-//                        .map(studentMapper::toSmallDto)
-//                        .toList()
-//        ).orElseGet(
-//                () -> studentRepository
-//                        .findAll(pageable)
-//                        .stream()
-//                        .map(studentMapper::toSmallDto)
-//                        .toList()
-//        );
+        List<StudentDTOForSave> byPagination = null; /*studentRepository*/
+//                .findAllByFullNameLike("%" + studentName.orElse("") + "%")
+//                .stream()
+//                .map(studentMapper::toSmallDto)
+//                .toList();
+        Pageable pageable = PageRequest.of(page.orElse(1), 3, Sort.by("fullName").descending());
+        byPagination = studentName.map(s ->
+                studentRepository
+                        .findAllByFullNameLike("%" + s + "%", pageable)
+                        .stream()
+                        .map(studentMapper::toSmallDto)
+                        .toList()
+        ).orElseGet(
+                () -> studentRepository
+                        .findAll(pageable)
+                        .stream()
+                        .map(studentMapper::toSmallDto)
+                        .toList()
+        );
 
         return ResponseEntity.ok(byPagination);
     }
@@ -146,7 +149,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseEntity<List<StudentSmallDto>> readAllByName(String studentName) {
-        List<StudentSmallDto> students = studentRepository.findAllByFullNameLike("%" + studentName + "%").stream().map(student -> new StudentSmallDto(student.getId(),student.getFullName())).toList();
+        List<StudentSmallDto> students = studentRepository.findAllByFullNameLike("%" + studentName + "%").stream().map(student -> new StudentSmallDto(student.getId(), student.getFullName())).toList();
         return ResponseEntity.ok(students);
+    }
+
+    @Override
+    public ResponseEntity<StudentDTOForAuth> getMe(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student topilmadi"));
+        StudentDTOForAuth studentDto = studentMapper.toDtoForAuth(student);
+        return ResponseEntity.ok(studentDto);
     }
 }

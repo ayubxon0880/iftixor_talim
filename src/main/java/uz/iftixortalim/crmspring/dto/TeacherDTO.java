@@ -17,7 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeacherDTO {
     @Null(groups = OnCreate.class)
     @NotNull(groups = OnUpdate.class)

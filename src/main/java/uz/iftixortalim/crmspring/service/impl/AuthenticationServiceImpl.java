@@ -77,23 +77,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR));
-        StudentDTOForAuth student = null;
-        TeacherDTO teacher = null;
-        UserDTO userDTO = null;
-        String role = user.getRole().getName();
-        if (role.equals("ROLE_STUDENT")) {
-            student = studentMapper.toDtoForAuth(studentRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
-        } else if (role.equals("ROLE_TEACHER")) {
-            teacher = teacherMapper.toDto(teacherRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
-            List<Group> groups = groupRepository.findByTeacherId(user.getId());
-            Set<GroupDTOForAuth> list = new HashSet<>();
-            for (Group group : groups) {
-                list.add(new GroupDTOForAuth(group.getId(),group.getDirection()));
-            }
-            teacher.setGroups(list);
-        } else if (role.equals("ROLE_ADMIN") || role.equals("ROLE_SUPER_ADMIN")){
-            userDTO = userMapper.toDto(userRepository.findById(user.getId()).orElseThrow(() -> new AuthenticationException(Messages.AUTH_ERROR)));
-        }
-        return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtService.generateToken(user)).teacher(teacher).student(student).user(userDTO).build());
+        UserDTO userDTO = userMapper.toDto(user);
+        return ResponseEntity.ok(
+                AuthenticationResponse
+                        .builder()
+                        .token(jwtService.generateToken(user))
+                        .user(userDTO)
+                        .build());
     }
 }

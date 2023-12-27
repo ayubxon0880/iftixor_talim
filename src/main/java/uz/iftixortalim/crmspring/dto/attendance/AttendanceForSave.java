@@ -13,5 +13,4 @@ import java.util.Map;
 public class AttendanceForSave {
     private Long groupId;
     private List<SmallAttendance> attendances;
-//    private String attendances;
 }

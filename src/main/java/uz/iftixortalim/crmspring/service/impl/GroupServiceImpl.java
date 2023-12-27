@@ -10,22 +10,29 @@ import uz.iftixortalim.crmspring.dto.group.GroupDTO;
 import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.group.GroupSmallDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
+import uz.iftixortalim.crmspring.dto.student.StudentDTO;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.mapper.GroupMapper;
+import uz.iftixortalim.crmspring.mapper.StudentMapper;
 import uz.iftixortalim.crmspring.model.Group;
+import uz.iftixortalim.crmspring.model.Student;
 import uz.iftixortalim.crmspring.model.User;
 import uz.iftixortalim.crmspring.repository.GroupRepository;
+import uz.iftixortalim.crmspring.repository.StudentRepository;
 import uz.iftixortalim.crmspring.service.GroupService;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
+    private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
     private final GroupMapper groupMapper;
 
     @Override
@@ -44,8 +51,8 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public ResponseEntity<GroupDTO> getById(Long id) {
         Group group = groupRepository.findById(id).orElseThrow(() -> new NotFoundException("Group not found"));
-        GroupDTO dto = groupMapper.toDto(group);
-        return ResponseEntity.ok(dto);
+        group.setStudents(null);
+        return ResponseEntity.ok(groupMapper.toDto(group));
     }
 
     @Override
@@ -95,7 +102,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll() {
-        List<GroupDTOForAuth> list = groupRepository.findAllGroup();
+        List<GroupDTOForAuth> list = groupRepository.findAll().stream().map(groupMapper::dtoForAuth).toList();
         return ResponseEntity.ok(list);
     }
 }

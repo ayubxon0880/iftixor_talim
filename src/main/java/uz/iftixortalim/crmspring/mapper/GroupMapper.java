@@ -65,7 +65,9 @@ public class GroupMapper {
         if (group == null) return null;
         return new GroupDTOForAuth(
                 group.getId(),
-                group.getDirection()
+                group.getDirection(),
+                group.getTeacher().getFullName(),
+                group.getTeacher().getPhone()
         );
     }
 }
