@@ -30,7 +30,6 @@ public class StudentServiceImpl implements StudentService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
     private final StudentMapper studentMapper;
     private final PasswordEncoder passwordEncoder;
     private final GroupRepository groupRepository;

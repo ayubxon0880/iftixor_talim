@@ -21,7 +21,12 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private Status status;
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany
+    @JoinTable(
+            name = "student_group",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
     private Set<Group> groups;
 
     public Student(Long id, String fullName, String phone, Status status) {

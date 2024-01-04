@@ -30,11 +30,6 @@ public class Group {
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDate createdAt;
-    @ManyToMany
-    @JoinTable(
-            name = "student_group",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
+    @ManyToMany(mappedBy = "groups")
     private List<Student> students;
 }
