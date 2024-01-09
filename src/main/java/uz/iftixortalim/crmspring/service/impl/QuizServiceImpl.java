@@ -56,6 +56,7 @@ public class QuizServiceImpl implements QuizService {
     public ResponseEntity<ApiResponse> save(QuizList quizList) {
         Map<Long,Integer> testlar = new HashMap<>();
         Map<Long,String> statuslar = new HashMap<>();
+
         for (Test test : quizList.getTests()) {
             testlar.put(test.getId(),test.getCorrect());
         }
@@ -67,7 +68,17 @@ public class QuizServiceImpl implements QuizService {
 
         for (Long key: testlar.keySet()) {
             Student student = studentRepository.findById(key).orElseThrow(() -> new NotFoundException("Student topilmadi"));
-            quizzes.add(new Quiz(null,student,group,LocalDate.now(ZoneId.of(ZONE)), quizList.getTestCount(), testlar.get(key), statuslar.get(key)));
+            Quiz quiz = new Quiz(
+                    null,
+                    student,
+                    group,
+                    LocalDate.now(ZoneId.of(ZONE)),
+                    quizList.getTestCount(),
+                    testlar.get(key),
+                    statuslar.get(key)
+            );
+
+            quizzes.add(quiz);
         }
         quizRepository.saveAll(quizzes);
         return ResponseEntity.status(201).body(ApiResponse.builder().message("Testlar muvaffaqiyatli qo'shildi").status(201).success(true).build());
@@ -78,3 +89,124 @@ public class QuizServiceImpl implements QuizService {
         return null;
     }
 }
+/*
+
+rozali_007
+mohichehra_007
+habibullo_007
+feruzbek_007
+dilnoza_007
+abdulaziz_007
+xurshida_007
+mohinur_007
+shoxruza_007
+ruhshona_007
+abdulatifxon_007
+yoldoshali_007
+mohinur_07
+feruza_007
+gulsanam_007
+nargiza_007
+hulkaroy_007
+sarkorbek_007
+umida_007
+boymatmirzo_007
+sevara_007
+durdona_007
+saddullabek_007
+abdulaziz_07
+ayubxon0880
+zahro_007
+sevinch_007
+mubina_007
+mavluda_007
+xojaxonova_007
+yusupova_007
+abduqahhorova
+abduhalilova
+holmatov
+sultonova
+yoldoshaliyeva
+alisherova
+keldiyev
+mamajonova
+muxtorova
+abdusattorova
+rahmonov
+sultonova_007
+fayzullayeva
+muhiddinov
+murotaliyeva
+hikmatullayeva
+nasriddinova
+jorayev
+aliqoziyeva
+islomiddinova
+komiljonova
+mominova
+kamoliddinova
+azimjonova
+numonaliyeva
+erkinov
+mamuraliyeva
+abdullayeva
+nasriddinov
+bekmirzayeva
+anvarjonova
+islomova
+rahmonova
+umarova
+saminova
+xalilubloyeva
+mamuraliyeva_007
+hayitova
+jabboraliyeva
+qodirova
+akbarova
+habibullayeva
+akbarova_007
+esonboyeva
+abdugafforova
+hoshimova
+abdurahimov
+botirov
+akbarov
+abduqasimova
+asliddin_79
+dilfuza_02
+ahror_80
+gulchiroy_02
+shukrona_25
+hojiakbar_20
+azizbek_83
+faxriddin
+dilshodjon
+zarifaxon
+dildora
+hilola
+dildora_1
+behruz
+oyatullo
+ilhomjon
+azizbek
+abduqodir
+abdurahmon
+lazizbek
+dilyorbek
+muhammadzohir
+abduhafiz
+behruz_1
+abdumajid
+sodiqova
+husnidabonu
+umarxojayeva
+muazzamxon
+mushtariy
+aziza
+abdulloh
+elyorbek_007
+diyora_007
+nurhayot_007
+
+
+*/

@@ -17,4 +17,6 @@ public interface TeacherService {
     ResponseEntity<ApiResponse> delete(Long id);
 
     ResponseEntity<List<TeacherDTO>> getAll();
+
+    ResponseEntity<TeacherDTO> getMe();
 }

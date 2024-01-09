@@ -3,15 +3,19 @@ package uz.iftixortalim.crmspring.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
 import uz.iftixortalim.crmspring.mapper.TeacherMapper;
+import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Teacher;
 import uz.iftixortalim.crmspring.model.User;
+import uz.iftixortalim.crmspring.repository.GroupRepository;
 import uz.iftixortalim.crmspring.repository.RoleRepository;
 import uz.iftixortalim.crmspring.repository.TeacherRepository;
 import uz.iftixortalim.crmspring.repository.UserRepository;
@@ -19,12 +23,14 @@ import uz.iftixortalim.crmspring.service.TeacherService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
     private final RoleRepository roleRepository;
     private final TeacherMapper teacherMapper;
     private final PasswordEncoder passwordEncoder;
@@ -89,5 +95,21 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public ResponseEntity<List<TeacherDTO>> getAll() {
         return ResponseEntity.ok(teacherRepository.findAll().stream().map(teacherMapper::toDto).toList());
+    }
+
+    @Override
+    public ResponseEntity<TeacherDTO> getMe() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Teacher teacher = teacherRepository.findById(user.getId()).orElseThrow(() -> new NotFoundException("Ustoz topilmadi"));
+        List<Group> groups = groupRepository.findByTeacherId(teacher.getId());
+
+        TeacherDTO teacherDTO = new TeacherDTO();
+
+        teacherDTO.setId(teacher.getId());
+        teacherDTO.setUsername(teacherDTO.getUsername());
+        teacherDTO.setPhone(teacher.getPhone());
+        teacherDTO.setFullName(teacher.getFullName());
+        teacherDTO.setGroups(groups.stream().map(group -> new GroupDTOForAuth(group.getId(), group.getDirection(), teacher.getFullName(),teacher.getPhone())).collect(Collectors.toSet()));
+        return ResponseEntity.ok(teacherDTO);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.attendance.*;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
+import uz.iftixortalim.crmspring.mapper.AttendanceMapper;
 import uz.iftixortalim.crmspring.model.Attendance;
 import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Student;
@@ -27,18 +28,41 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
+    private final AttendanceMapper attendanceMapper;
     private final String ZONE = "Asia/Tokyo";
 
 
     @Override
-    public ResponseEntity<List<AttendanceDTO>> readByGroupId(Optional<Integer> year, Optional<Integer> month, Long groupId) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Long groupId) {
+        int year = LocalDate.now(ZoneId.of(ZONE)).getYear();
+        LocalDate first = LocalDate.of(year, Month.of(month), 1);
+        LocalDate last = LocalDate.of(year, Month.of(month), Month.of(month).length(isLeapYear(year)));
+        List<Attendance> attendanceDateDesc = attendanceRepository.findAttendanceByGroupIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(groupId, first, last);
+//        List<AttendanceSmallDTO> list = attendanceDateDesc
+//                .stream()
+//                .map(attendanceMapper::toSmallDto)
+//                .toList();
+        List<AttendanceParent> parents = new ArrayList<>();
+        Map<LocalDate,List<AttendanceSmallDTO>> map = new HashMap<>();
+        for (Attendance attendance : attendanceDateDesc) {
+            if (map.get(attendance.getAttendanceDate()) == null) {
+                map.put(attendance.getAttendanceDate(), new ArrayList<>(List.of(attendanceMapper.toSmallDto(attendance))));
+            } else {
+                List<AttendanceSmallDTO> attendanceSmallDTOS = map.get(attendance.getAttendanceDate());
+                attendanceSmallDTOS.add(attendanceMapper.toSmallDto(attendance));
+                map.put(attendance.getAttendanceDate(), attendanceSmallDTOS);
+            }
+        }
+
+        map.forEach((localDate, attendances) -> parents.add(new AttendanceParent(localDate,attendances)));
+
+        return ResponseEntity.ok(parents);
     }
 
     @Override
     public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId,Integer year) {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
-        LocalDate last = LocalDate.of(year, Month.DECEMBER, 31);
+        LocalDate last = LocalDate.of(year, Month.DECEMBER, Month.DECEMBER.length(isLeapYear(year)));
 
         List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, first, last);
         AttendanceType attendanceType = new AttendanceType();
@@ -80,5 +104,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     public ResponseEntity<List<AttendanceDTO>> readAllByPagination(Optional<Integer> page, Optional<Integer> year, Optional<Integer> month, Optional<Integer> studentName) {
 //        attendanceRepository
         return null;
+    }
+
+    public boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 }

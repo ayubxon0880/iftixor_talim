@@ -6,9 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uz.iftixortalim.crmspring.dto.attendance.AttendanceBig;
-import uz.iftixortalim.crmspring.dto.attendance.AttendanceDTO;
-import uz.iftixortalim.crmspring.dto.attendance.AttendanceForSave;
+import uz.iftixortalim.crmspring.dto.attendance.*;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
@@ -30,10 +28,9 @@ public class AttendanceController {
 
 
     @GetMapping("/group/{groupId}")
-    public ResponseEntity<List<AttendanceDTO>> readByGroupId(@RequestParam Optional<Integer> year,
-                                                                 @RequestParam Optional<Integer> month,
-                                                                 @PathVariable Long groupId){
-        return attendanceService.readByGroupId(year,month,groupId);
+    public ResponseEntity<List<AttendanceParent>> readByGroupId(@RequestParam Integer month,
+                                                                @PathVariable Long groupId){
+        return attendanceService.readByGroupId(month,groupId);
     }
 
     @GetMapping

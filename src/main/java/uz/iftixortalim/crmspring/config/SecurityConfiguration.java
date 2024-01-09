@@ -28,7 +28,8 @@ public class SecurityConfiguration {
         http.cors(cors -> {
             cors.configurationSource(request -> {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("https://iftixor-talim.vercel.app/"));
+                configuration.setAllowedOrigins(List.of("http://localhost:3000/"));
+//                configuration.setAllowedOrigins(List.of("https://iftixor-talim.vercel.app/"));
                 configuration.setAllowedMethods(List.of("*"));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(List.of("*"));

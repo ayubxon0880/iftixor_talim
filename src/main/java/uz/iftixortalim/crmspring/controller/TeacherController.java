@@ -32,6 +32,12 @@ public class TeacherController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return teacherService.getById(user.getId());
     }
+
+    @GetMapping("/get-me")
+    public ResponseEntity<TeacherDTO> getMe(){
+        return teacherService.getMe();
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<TeacherDTO>> readAll(){
         return teacherService.getAll();

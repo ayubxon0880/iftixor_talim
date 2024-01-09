@@ -66,7 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
         LocalDate currentDate = LocalDate.now(ZoneId.of(ZONE)); // JST = Asian/Tokyo
         int currentYear = year.orElseGet(currentDate::getYear);
         LocalDate first = LocalDate.of(currentYear, Month.JANUARY, 1);
-        LocalDate last = LocalDate.of(currentYear, Month.DECEMBER, 31);
+        LocalDate last = LocalDate.of(currentYear, Month.DECEMBER, Month.DECEMBER.length(currentDate.isLeapYear()));
 
         List<PaymentDTO> payments = paymentRepository.findByStudentIdAndPaymentDateBetweenOrderByPaymentDateDesc(id,first,last).stream().map(paymentMapper::toDto).toList();
         return ResponseEntity.ok(payments);
