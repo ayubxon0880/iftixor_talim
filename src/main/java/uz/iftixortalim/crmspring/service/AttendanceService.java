@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AttendanceService {
-    ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Optional<Integer> day,Long groupId);
+    ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Integer day,Long groupId);
     ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId,Integer year);
     ResponseEntity<List<AttendanceBig>> read(Integer year);
     ResponseEntity<ApiResponse> save(AttendanceForSave attendances);

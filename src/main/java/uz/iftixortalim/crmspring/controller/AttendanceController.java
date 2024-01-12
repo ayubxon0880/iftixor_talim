@@ -29,7 +29,7 @@ public class AttendanceController {
 
     @GetMapping("/group/{groupId}")
     public ResponseEntity<List<AttendanceParent>> readByGroupId(@RequestParam Integer month,
-                                                                @RequestParam Optional<Integer> day,
+                                                                @RequestParam Integer day,
                                                                 @PathVariable Long groupId){
         return attendanceService.readByGroupId(month,day,groupId);
     }

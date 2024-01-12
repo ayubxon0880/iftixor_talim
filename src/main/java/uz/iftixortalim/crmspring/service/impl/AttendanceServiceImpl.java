@@ -33,14 +33,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 
     @Override
-    public ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Optional<Integer> day, Long groupId) {
-        int year = LocalDate.now(ZoneId.of(ZONE)).getYear();
-        LocalDate first = LocalDate.of(year, Month.of(month), 1);
-        LocalDate last = LocalDate.of(year, Month.of(month), Month.of(month).length(isLeapYear(year)));
+    public ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Integer day, Long groupId) {
+        LocalDate date = LocalDate.now(ZoneId.of(ZONE));
+        int year = date.getYear();
+        Month _month = Month.of(month);
+        int _day = 1;
+
+        int length = _month.length(isLeapYear(year));
+        if (length < day || day <= 0) {
+            throw new NotFoundException("kun xato kiritilgan");
+        }
+        LocalDate first = LocalDate.of(year, _month, day);
+        LocalDate last = LocalDate.of(year, _month, day);
         List<Attendance> attendanceDateDesc = attendanceRepository.findAttendanceByGroupIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(groupId, first, last);
 
         List<AttendanceParent> parents = new ArrayList<>();
-        Map<LocalDate,List<AttendanceSmallDTO>> map = new HashMap<>();
+        Map<LocalDate, List<AttendanceSmallDTO>> map = new HashMap<>();
         for (Attendance attendance : attendanceDateDesc) {
             if (map.get(attendance.getAttendanceDate()) == null) {
                 map.put(attendance.getAttendanceDate(), new ArrayList<>(List.of(attendanceMapper.toSmallDto(attendance))));
@@ -51,13 +59,13 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
         }
 
-        map.forEach((localDate, attendances) -> parents.add(new AttendanceParent(localDate,attendances)));
+        map.forEach((localDate, attendances) -> parents.add(new AttendanceParent(localDate, attendances)));
 
         return ResponseEntity.ok(parents);
     }
 
     @Override
-    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId,Integer year) {
+    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId, Integer year) {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate last = LocalDate.of(year, Month.DECEMBER, Month.DECEMBER.length(isLeapYear(year)));
 
@@ -70,7 +78,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public ResponseEntity<List<AttendanceBig>> read(Integer year) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return readByStudentId(user.getId(),year);
+        return readByStudentId(user.getId(), year);
     }
 
     @Override
