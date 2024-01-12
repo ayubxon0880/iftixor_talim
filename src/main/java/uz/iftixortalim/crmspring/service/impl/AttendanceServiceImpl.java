@@ -33,15 +33,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 
     @Override
-    public ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Long groupId) {
+    public ResponseEntity<List<AttendanceParent>> readByGroupId(Integer month, Optional<Integer> day, Long groupId) {
         int year = LocalDate.now(ZoneId.of(ZONE)).getYear();
         LocalDate first = LocalDate.of(year, Month.of(month), 1);
         LocalDate last = LocalDate.of(year, Month.of(month), Month.of(month).length(isLeapYear(year)));
         List<Attendance> attendanceDateDesc = attendanceRepository.findAttendanceByGroupIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(groupId, first, last);
-//        List<AttendanceSmallDTO> list = attendanceDateDesc
-//                .stream()
-//                .map(attendanceMapper::toSmallDto)
-//                .toList();
+
         List<AttendanceParent> parents = new ArrayList<>();
         Map<LocalDate,List<AttendanceSmallDTO>> map = new HashMap<>();
         for (Attendance attendance : attendanceDateDesc) {
