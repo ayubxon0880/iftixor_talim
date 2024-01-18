@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.quiz.QuizDTO;
 import uz.iftixortalim.crmspring.dto.quiz.QuizDTON;
 import uz.iftixortalim.crmspring.dto.quiz.QuizList;
+import uz.iftixortalim.crmspring.dto.quiz.QuizParent;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
 import uz.iftixortalim.crmspring.service.QuizService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,9 @@ public class QuizController {
     }
 
     @GetMapping("/group/{id}")
-    public ResponseEntity<List<QuizDTO>> getByGroupId(@PathVariable Long id){
-        return quizService.getByGroupId(id);
+    public ResponseEntity<List<QuizDTO>> getByGroupId(@PathVariable Long id,
+                                                         @RequestParam LocalDate first){
+        return quizService.getByGroupId(id,first);
     }
 
     @PostMapping("/save")

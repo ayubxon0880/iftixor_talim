@@ -43,6 +43,13 @@ public class GroupController {
         return groupService.getByDirectionAll();
     }
 
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<List<GroupDTOForAuth>> getByStudent(@PathVariable Long id){
+        return groupService.getByStudent(id);
+    }
+
+
     @GetMapping
     public ResponseEntity<List<GroupSmallDTO>> getByAll(){
         return groupService.getByAll();

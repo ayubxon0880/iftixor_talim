@@ -24,4 +24,6 @@ public interface GroupService {
     ResponseEntity<GroupDTO> getByDirection(String direction);
 
     ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll();
+
+    ResponseEntity<List<GroupDTOForAuth>> getByStudent(Long id);
 }

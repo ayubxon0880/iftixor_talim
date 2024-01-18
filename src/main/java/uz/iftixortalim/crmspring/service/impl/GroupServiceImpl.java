@@ -22,6 +22,7 @@ import uz.iftixortalim.crmspring.repository.StudentRepository;
 import uz.iftixortalim.crmspring.service.GroupService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,6 @@ import java.util.stream.Collectors;
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final StudentRepository studentRepository;
-    private final StudentMapper studentMapper;
     private final GroupMapper groupMapper;
 
     @Override
@@ -103,6 +103,13 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public ResponseEntity<List<GroupDTOForAuth>> getByDirectionAll() {
         List<GroupDTOForAuth> list = groupRepository.findAll().stream().map(groupMapper::dtoForAuth).toList();
+        return ResponseEntity.ok(list);
+    }
+
+    @Override
+    public ResponseEntity<List<GroupDTOForAuth>> getByStudent(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student topilmadi"));
+        List<GroupDTOForAuth> list = student.getGroups().stream().map(groupMapper::dtoForAuth).toList();
         return ResponseEntity.ok(list);
     }
 }
