@@ -111,6 +111,20 @@ public class AttendanceServiceImpl implements AttendanceService {
         return null;
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> update(Long attId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(user);
+        if (!(user.getRole().getName().equals("ROLE_TEACHER") || user.getRole().getName().equals("ROLE_ADMIN") || user.getRole().getName().equals("ROLE_SUPER_ADMIN"))) {
+            return ResponseEntity.ok(ApiResponse.builder().build());
+        }
+
+        Attendance attendance = attendanceRepository.findById(attId).orElseThrow(() -> new NotFoundException("Davomat topilmadi"));
+        attendance.setAttendance("Qatnashdi");
+        attendanceRepository.save(attendance);
+        return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Davomat almashtirildi").build());
+    }
+
     public boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }

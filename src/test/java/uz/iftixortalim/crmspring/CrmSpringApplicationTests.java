@@ -8,13 +8,8 @@ import uz.iftixortalim.crmspring.repository.AttendanceRepository;
 
 @SpringBootTest
 class CrmSpringApplicationTests {
-	@Autowired
-	private AttendanceRepository attendanceRepository;
-	@Autowired
-	private AttendanceMapper attendanceMapper;
-	@Test
 	void contextLoads() {
-
+		System.out.println("hi");
 	}
 
 }

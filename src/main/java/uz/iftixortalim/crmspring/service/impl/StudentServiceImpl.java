@@ -158,4 +158,9 @@ public class StudentServiceImpl implements StudentService {
         StudentDTOForAuth studentDto = studentMapper.toDtoForAuth(student);
         return ResponseEntity.ok(studentDto);
     }
+
+    @Override
+    public ResponseEntity<Boolean> existByName(String name) {
+        return ResponseEntity.ok(studentRepository.existsByFullName(name));
+    }
 }

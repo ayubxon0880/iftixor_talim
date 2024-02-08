@@ -28,4 +28,6 @@ public interface StudentService {
     ResponseEntity<List<StudentSmallDto>> readAllByName(String studentName);
 
     ResponseEntity<StudentDTOForAuth> getMe(Long id);
+
+    ResponseEntity<Boolean> existByName(String name);
 }

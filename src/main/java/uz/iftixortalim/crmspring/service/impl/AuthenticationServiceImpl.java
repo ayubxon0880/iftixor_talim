@@ -7,33 +7,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.config.JwtService;
-import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
-import uz.iftixortalim.crmspring.dto.student.StudentDTO;
-import uz.iftixortalim.crmspring.dto.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.UserDTO;
 import uz.iftixortalim.crmspring.dto.response.AuthenticationRequest;
 import uz.iftixortalim.crmspring.dto.response.AuthenticationResponse;
 import uz.iftixortalim.crmspring.dto.response.RegisterRequest;
-import uz.iftixortalim.crmspring.dto.student.StudentDTOForAuth;
 import uz.iftixortalim.crmspring.exception.AuthenticationException;
 import uz.iftixortalim.crmspring.exception.Messages;
 import uz.iftixortalim.crmspring.exception.NotFoundException;
 import uz.iftixortalim.crmspring.exception.AlreadyExists;
-import uz.iftixortalim.crmspring.mapper.GroupMapper;
-import uz.iftixortalim.crmspring.mapper.StudentMapper;
-import uz.iftixortalim.crmspring.mapper.TeacherMapper;
 import uz.iftixortalim.crmspring.mapper.UserMapper;
-import uz.iftixortalim.crmspring.model.Group;
 import uz.iftixortalim.crmspring.model.Role;
 import uz.iftixortalim.crmspring.model.User;
 import uz.iftixortalim.crmspring.repository.*;
 import uz.iftixortalim.crmspring.service.AuthenticationService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +31,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
-    private final GroupRepository groupRepository;
-    private final StudentMapper studentMapper;
-    private final TeacherMapper teacherMapper;
     private final UserMapper userMapper;
 
 

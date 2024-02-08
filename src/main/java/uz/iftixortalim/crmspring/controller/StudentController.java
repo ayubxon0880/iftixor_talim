@@ -48,6 +48,11 @@ public class StudentController {
         return studentService.getById(id);
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Boolean> existByName(@PathVariable String name) {
+        return studentService.existByName(name);
+    }
+
 
     @GetMapping("/get-me")
     public ResponseEntity<StudentDTOForAuth> getMe() {

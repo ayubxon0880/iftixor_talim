@@ -13,4 +13,5 @@ public interface AttendanceService {
     ResponseEntity<List<AttendanceBig>> read(Integer year);
     ResponseEntity<ApiResponse> save(AttendanceForSave attendances);
     ResponseEntity<List<AttendanceDTO>> readAllByPagination(Optional<Integer> page, Optional<Integer> year, Optional<Integer> month, Optional<Integer> studentName);
+    ResponseEntity<ApiResponse> update(Long studentId);
 }

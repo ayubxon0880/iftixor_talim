@@ -34,6 +34,11 @@ public class AttendanceController {
         return attendanceService.readByGroupId(month,day,groupId);
     }
 
+    @GetMapping("/update/{attId}")
+    public ResponseEntity<ApiResponse> update(@PathVariable Long attId){
+        return attendanceService.update(attId);
+    }
+
     @GetMapping
     public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year){
         return attendanceService.read(year);
