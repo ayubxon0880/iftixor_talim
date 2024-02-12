@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.student.StudentDTO;
@@ -79,11 +80,17 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public ResponseEntity<ApiResponse> delete(Long id) {
         try {
-            if (!studentRepository.existsById(id)) {
+            if (!userRepository.existsById(id)) {
                 throw new NotFoundException("Student not found");
             }
-            studentRepository.deleteById(id);
-            return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Student deleted").build());
+            User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user2 = userRepository.findById(id).get();
+            if (user1.equals(user2)) {
+                userRepository.deleteById(id);
+                return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Student deleted").build());
+            } else {
+                throw new NotFoundException("User not found");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(300).body(ApiResponse.builder().success(false).status(300).message("Something is wrong").build());
         }

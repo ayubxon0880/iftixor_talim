@@ -22,7 +22,7 @@ public class StudentDTOForSave {
     private Long id;
     @NotNull
     private String fullName;
-    @NotNull
+//    @NotNull
     private String phone;
     @Null(groups = OnCreate.class)
     private String status;
@@ -34,14 +34,6 @@ public class StudentDTOForSave {
     private String password;
 //    @NotNull
     private String username;
-
-    public StudentDTOForSave(String fullName, String phone, List<Long> groups, String password, String username) {
-        this.fullName = fullName;
-        this.phone = phone;
-        this.groups = groups;
-        this.password = password;
-        this.username = username;
-    }
 
     public StudentDTOForSave(String fullName, String phone, String status, List<Long> groups, String username) {
         this.fullName = fullName;

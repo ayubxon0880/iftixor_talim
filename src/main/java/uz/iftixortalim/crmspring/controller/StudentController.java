@@ -29,10 +29,9 @@ public class StudentController {
     @Validated(value = OnCreate.class)
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody StudentDTOForSave studentDTO) {
         String username = studentDTO.getFullName().toLowerCase().replace("'","").replace(" ","");
-
         studentDTO.setPassword(username);
         studentDTO.setUsername(username);
-
+        studentDTO.setPhone("1");
         return studentService.create(studentDTO);
     }
 
