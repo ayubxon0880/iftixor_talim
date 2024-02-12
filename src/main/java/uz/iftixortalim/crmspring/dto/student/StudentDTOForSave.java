@@ -28,11 +28,11 @@ public class StudentDTOForSave {
     private String status;
     @NotNull
     private List<Long> groups;
-    @NotNull(groups = OnCreate.class)
+//    @NotNull(groups = OnCreate.class)
     @Null(groups = OnUpdate.class)
-    @ValidPassword
+//    @ValidPassword
     private String password;
-    @NotNull
+//    @NotNull
     private String username;
 
     public StudentDTOForSave(String fullName, String phone, List<Long> groups, String password, String username) {

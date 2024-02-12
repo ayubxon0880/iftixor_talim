@@ -28,6 +28,11 @@ public class StudentController {
     @PostMapping
     @Validated(value = OnCreate.class)
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody StudentDTOForSave studentDTO) {
+        String username = studentDTO.getFullName().toLowerCase().replace("'","");
+
+        studentDTO.setPassword(username);
+        studentDTO.setUsername(username);
+
         return studentService.create(studentDTO);
     }
 
