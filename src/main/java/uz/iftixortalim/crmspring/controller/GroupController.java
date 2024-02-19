@@ -3,6 +3,7 @@ package uz.iftixortalim.crmspring.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.group.GroupDTO;
@@ -24,11 +25,13 @@ public class GroupController {
 
     @PostMapping
     @Validated(value = OnCreate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody GroupDTO groupDTO){
         return groupService.create(groupDTO);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<GroupDTO> getById(@PathVariable Long id){
         return groupService.getById(id);
     }
@@ -62,12 +65,30 @@ public class GroupController {
 
     @PutMapping
     @Validated(value = OnUpdate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<GroupDTO> update(@Valid @RequestBody GroupDTO groupDTO){
         return groupService.update(groupDTO);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id){
         return groupService.delete(id);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -27,6 +27,7 @@ public class StudentController {
 
     @PostMapping
     @Validated(value = OnCreate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody StudentDTOForSave studentDTO) {
         String username = studentDTO.getFullName().toLowerCase().replace("'","").replace(" ","");
         studentDTO.setPassword(username);
@@ -36,6 +37,7 @@ public class StudentController {
     }
 
     @PostMapping("/add-group")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> addToGroup(@RequestParam Long studentId,@RequestParam Long groupId) {
         return studentService.addGroup(studentId,groupId);
     }
@@ -48,6 +50,7 @@ public class StudentController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<StudentDTO> getById(@PathVariable Long id) {
         return studentService.getById(id);
     }
@@ -59,6 +62,7 @@ public class StudentController {
 
 
     @GetMapping("/get-me")
+    @PreAuthorize(value = "hasAnyRole('ROLE_STUDENT')")
     public ResponseEntity<StudentDTOForAuth> getMe() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user == null){
@@ -69,6 +73,7 @@ public class StudentController {
 
 
     @GetMapping("/group/{groupId}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<StudentDTO>> getAll(@PathVariable Long groupId, @RequestParam Optional<String> search) {
         return studentService.getAll(groupId, search);
     }
@@ -80,6 +85,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return studentService.delete(id);
     }
@@ -91,7 +97,29 @@ public class StudentController {
     }
 
     @GetMapping("/get-by-name")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<List<StudentSmallDto>> readAllByName(@RequestParam String studentName){
         return studentService.readAllByName(studentName);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

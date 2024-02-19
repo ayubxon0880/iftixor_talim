@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.iftixortalim.crmspring.dto.student.StudentDTOForAuth;
-import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.teacher.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.UserDTO;
 
 @AllArgsConstructor

@@ -3,10 +3,11 @@ package uz.iftixortalim.crmspring.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.teacher.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.group.OnCreate;
 import uz.iftixortalim.crmspring.group.OnUpdate;
@@ -23,6 +24,7 @@ public class TeacherController {
     private final TeacherService teacherService;
     @PostMapping
     @Validated(value = OnCreate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody TeacherDTO teacherDTO){
         return teacherService.create(teacherDTO);
     }
@@ -34,6 +36,7 @@ public class TeacherController {
     }
 
     @GetMapping("/get-me")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER')")
     public ResponseEntity<TeacherDTO> getMe(){
         return teacherService.getMe();
     }
@@ -45,12 +48,16 @@ public class TeacherController {
 
     @PutMapping
     @Validated(value = OnUpdate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> update(@Valid @RequestBody TeacherDTO teacherDTO){
         return teacherService.update(teacherDTO);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id){
         return teacherService.delete(id);
     }
 }
+
+

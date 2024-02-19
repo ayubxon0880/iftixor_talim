@@ -3,6 +3,7 @@ package uz.iftixortalim.crmspring.mapper;
 import org.springframework.stereotype.Service;
 import uz.iftixortalim.crmspring.dto.attendance.AttendanceDTO;
 import uz.iftixortalim.crmspring.dto.attendance.AttendanceForSave;
+import uz.iftixortalim.crmspring.dto.attendance.AttendanceSmall;
 import uz.iftixortalim.crmspring.dto.attendance.AttendanceSmallDTO;
 import uz.iftixortalim.crmspring.model.Attendance;
 
@@ -27,6 +28,13 @@ public class AttendanceMapper {
         return attendance == null ? null : new AttendanceSmallDTO(
                 attendance.getId(),
                 attendance.getStudent() != null ? attendance.getStudent().getFullName() : "Deleted student",
+                attendance.getAttendance()
+        );
+    }
+
+    public AttendanceSmall toSmall(Attendance attendance){
+        return attendance == null ? null : new AttendanceSmall(
+                attendance.getAttendanceDate(),
                 attendance.getAttendance()
         );
     }

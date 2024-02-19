@@ -17,9 +17,15 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public ResponseEntity<ApiResponse> sendMail(Mail mail) {
+
+
+
+
+
+
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("codera1401@gmail.com");
-        message.setTo("ayubxonnt@gmail.com");
+        message.setFrom("ayubxonnt@gmail.com");
+        message.setTo("codera1401@gmail.com");
         message.setText(mail.getPhone()+" dan.\n\n"+mail.getMessage());
         message.setSubject("Taklif va Shikoyat");
 

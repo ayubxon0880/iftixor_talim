@@ -2,7 +2,7 @@ package uz.iftixortalim.crmspring.service;
 
 
 import org.springframework.http.ResponseEntity;
-import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.teacher.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 
 import java.util.List;

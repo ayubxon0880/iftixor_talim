@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.iftixortalim.crmspring.dto.TeacherDTO;
+import uz.iftixortalim.crmspring.dto.teacher.TeacherDTO;
 import uz.iftixortalim.crmspring.dto.group.GroupDTOForAuth;
 import uz.iftixortalim.crmspring.dto.response.ApiResponse;
 import uz.iftixortalim.crmspring.exception.NotFoundException;

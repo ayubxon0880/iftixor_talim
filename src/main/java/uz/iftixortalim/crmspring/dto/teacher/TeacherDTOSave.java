@@ -1,4 +1,4 @@
-package uz.iftixortalim.crmspring.dto;
+package uz.iftixortalim.crmspring.dto.teacher;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

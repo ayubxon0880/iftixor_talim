@@ -3,6 +3,7 @@ package uz.iftixortalim.crmspring.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.quiz.QuizDTO;
@@ -25,32 +26,52 @@ public class QuizController {
     private final QuizService quizService;
 
     @GetMapping("/student/{id}")
-    public ResponseEntity<List<QuizDTO>> getByStudentId(@PathVariable Long id){
+    public ResponseEntity<List<QuizDTO>> getByStudentId(@PathVariable Long id) {
         return quizService.getByStudentId(id);
     }
 
     @GetMapping("/student")
-    public ResponseEntity<List<QuizDTO>> getByStudentId(){
+    public ResponseEntity<List<QuizDTO>> getByStudentId() {
         return quizService.getByStudentId();
     }
 
     @GetMapping("/group/{id}")
     public ResponseEntity<List<QuizDTO>> getByGroupId(@PathVariable Long id,
-                                                         @RequestParam LocalDate first){
-        return quizService.getByGroupId(id,first);
+                                                      @RequestParam LocalDate first) {
+        return quizService.getByGroupId(id, first);
     }
 
     @PostMapping("/save")
     @Validated(value = OnCreate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> save(@Valid @RequestBody QuizList quizList) {
         return quizService.save(quizList);
     }
 
     @PutMapping
     @Validated(value = OnUpdate.class)
-        public ResponseEntity<ApiResponse> update(@Valid @RequestBody QuizDTON quizDTO) {
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    public ResponseEntity<ApiResponse> update(@Valid @RequestBody QuizDTON quizDTO) {
         return quizService.update(quizDTO);
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

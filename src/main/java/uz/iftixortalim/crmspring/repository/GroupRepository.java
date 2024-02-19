@@ -17,4 +17,5 @@ public interface GroupRepository extends JpaRepository<Group,Long> {
 
     List<Group> findByTeacherId(Long id);
     Optional<Group> findByDirectionAndTeacherId(String direction, Long id);
+
 }

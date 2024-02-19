@@ -37,7 +37,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         LocalDate date = LocalDate.now(ZoneId.of(ZONE));
         int year = date.getYear();
         Month _month = Month.of(month);
-        int _day = 1;
 
         int length = _month.length(isLeapYear(year));
         if (length < day || day <= 0) {
@@ -49,6 +48,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         List<AttendanceParent> parents = new ArrayList<>();
         Map<LocalDate, List<AttendanceSmallDTO>> map = new HashMap<>();
+
         for (Attendance attendance : attendanceDateDesc) {
             if (map.get(attendance.getAttendanceDate()) == null) {
                 map.put(attendance.getAttendanceDate(), new ArrayList<>(List.of(attendanceMapper.toSmallDto(attendance))));
@@ -59,26 +59,55 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
         }
 
-        map.forEach((localDate, attendances) -> parents.add(new AttendanceParent(localDate, attendances)));
+        map.forEach((localDate, attendances) -> parents.add(
+                        AttendanceParent
+                                .builder()
+                                .date(localDate)
+                                .build()
+                )
+        );
 
         return ResponseEntity.ok(parents);
     }
 
     @Override
-    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId, Integer year) {
+    public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId, Long groupId, Integer year) {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate last = LocalDate.of(year, Month.DECEMBER, Month.DECEMBER.length(isLeapYear(year)));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group not found"));
+        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndGroupInAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, List.of(group), first, last);
 
-        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, first, last);
-        AttendanceType attendanceType = new AttendanceType();
-        List<AttendanceBig> list = attendanceType.add(attendanceList);
-        return ResponseEntity.ok(list);
+        List<AttendanceBig> attendanceBigs = new ArrayList<>();
+        Map<String, List<AttendanceSmall>> attendanceMap = new HashMap<>();
+
+        for (Attendance attendance : attendanceList) {
+            String month = attendance.getAttendanceDate().getMonth().name();
+            if (attendanceMap.get(month) == null) {
+                attendanceMap.put(month, new ArrayList<>(List.of(attendanceMapper.toSmall(attendance))));
+            } else {
+                List<AttendanceSmall> attendanceSmall = attendanceMap.get(month);
+                attendanceSmall.add(attendanceMapper.toSmall(attendance));
+                attendanceMap.put(month, attendanceSmall);
+            }
+
+        }
+
+        attendanceMap.forEach((month, attendanceSmall) -> attendanceBigs.add(
+                        AttendanceBig
+                                .builder()
+                                .childAttendance(attendanceSmall)
+                                .month(month)
+                                .build()
+                )
+        );
+
+        return ResponseEntity.ok(attendanceBigs);
     }
 
     @Override
-    public ResponseEntity<List<AttendanceBig>> read(Integer year) {
+    public ResponseEntity<List<AttendanceBig>> read(Integer year, Long groupId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return readByStudentId(user.getId(), year);
+        return readByStudentId(user.getId(), groupId, year);
     }
 
     @Override
@@ -107,7 +136,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public ResponseEntity<List<AttendanceDTO>> readAllByPagination(Optional<Integer> page, Optional<Integer> year, Optional<Integer> month, Optional<Integer> studentName) {
-//        attendanceRepository
         return null;
     }
 
@@ -124,6 +152,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         attendanceRepository.save(attendance);
         return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Davomat almashtirildi").build());
     }
+
 
     public boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);

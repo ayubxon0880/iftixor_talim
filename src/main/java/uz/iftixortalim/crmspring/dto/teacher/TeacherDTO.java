@@ -1,4 +1,4 @@
-package uz.iftixortalim.crmspring.dto;
+package uz.iftixortalim.crmspring.dto.teacher;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;

@@ -3,6 +3,7 @@ package uz.iftixortalim.crmspring.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.iftixortalim.crmspring.dto.PaymentDTO;
@@ -24,6 +25,7 @@ public class PaymentController {
 
     @PostMapping
     @Validated(value = OnCreate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody PaymentDTOForSave paymentDTOForSave){
         return paymentService.create(paymentDTOForSave);
     }
@@ -40,12 +42,28 @@ public class PaymentController {
 
     @PutMapping
     @Validated(value = OnUpdate.class)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<PaymentDTO> update(@Valid @RequestBody PaymentDTOForSave paymentDTOForSave){
         return paymentService.update(paymentDTOForSave);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id){
         return paymentService.delete(id);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

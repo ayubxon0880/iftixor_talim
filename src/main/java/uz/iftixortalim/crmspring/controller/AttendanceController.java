@@ -3,6 +3,7 @@ package uz.iftixortalim.crmspring.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,16 +36,18 @@ public class AttendanceController {
     }
 
     @GetMapping("/update/{attId}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<ApiResponse> update(@PathVariable Long attId){
         return attendanceService.update(attId);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year){
-        return attendanceService.read(year);
+    @GetMapping("/{groupId}")
+    public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year, @PathVariable Long groupId){
+        return attendanceService.read(year,groupId);
     }
 
     @PostMapping("/save")
+    @PreAuthorize(value = "hasAnyRole('ROLE_TEACHER')")
     public ResponseEntity<ApiResponse> save(@RequestBody AttendanceForSave attendances){
         return attendanceService.save(attendances);
     }
@@ -60,3 +63,27 @@ public class AttendanceController {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
