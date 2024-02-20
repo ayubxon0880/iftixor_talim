@@ -41,8 +41,9 @@ public class AttendanceController {
         return attendanceService.update(attId);
     }
 
-    @GetMapping("/{groupId}")
-    public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year, @PathVariable Long groupId){
+    @GetMapping
+    public ResponseEntity<List<AttendanceBig>> read(@RequestParam Integer year){
+        Long groupId = 1L;
         return attendanceService.read(year,groupId);
     }
 
