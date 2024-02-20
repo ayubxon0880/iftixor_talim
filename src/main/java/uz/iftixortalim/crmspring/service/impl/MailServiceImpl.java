@@ -17,12 +17,6 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public ResponseEntity<ApiResponse> sendMail(Mail mail) {
-
-
-
-
-
-
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("ayubxonnt@gmail.com");
         message.setTo("codera1401@gmail.com");
