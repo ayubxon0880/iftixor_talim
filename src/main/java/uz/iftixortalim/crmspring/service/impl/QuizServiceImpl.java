@@ -56,27 +56,34 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public ResponseEntity<ApiResponse> save(QuizList quizList) {
         Map<Long,Integer> testlar = new HashMap<>();
-        Map<Long,String> statuslar = new HashMap<>();
 
         for (Test test : quizList.getTests()) {
             testlar.put(test.getId(),test.getCorrect());
         }
-        for (Status status : quizList.getStatus()) {
-            statuslar.put(status.getId(), status.getName());
-        }
         List<Quiz> quizzes = new ArrayList<>();
         Group group = groupRepository.findById(quizList.getGroupId()).orElseThrow();
 
-        for (Long key: testlar.keySet()) {
-            Student student = studentRepository.findById(key).orElseThrow(() -> new NotFoundException("Student topilmadi"));
+//        for (Long key: testlar.keySet()) {
+//            Student student = studentRepository.findById(key).orElseThrow(() -> new NotFoundException("Student topilmadi"));
+//            Quiz quiz = new Quiz(
+//                    null,
+//                    student,
+//                    group,
+//                    LocalDate.now(ZoneId.of(ZONE)),
+//                    quizList.getTestCount(),
+//                    testlar.get(key)
+//            );
+//
+//            quizzes.add(quiz);
+//        }
+        for (Student student: group.getStudents()) {
             Quiz quiz = new Quiz(
                     null,
                     student,
                     group,
                     LocalDate.now(ZoneId.of(ZONE)),
                     quizList.getTestCount(),
-                    testlar.get(key),
-                    statuslar.get(key)
+                    testlar.get(student.getId()) == null ? 0 : testlar.get(student.getId())
             );
 
             quizzes.add(quiz);

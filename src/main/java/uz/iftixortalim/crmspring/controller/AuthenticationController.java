@@ -17,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register-user")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+//    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public ResponseEntity<AuthenticationResponse> registerUserByAdmin(@Valid @RequestBody RegisterRequest request){
         return authenticationService.register(request);
     }

@@ -26,5 +26,4 @@ public class QuizDTO {
     private Integer testCount;
     private Integer correct;
     private Integer wrongAnswer;
-    private String degree;
 }

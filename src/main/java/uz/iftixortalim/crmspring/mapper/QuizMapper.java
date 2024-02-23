@@ -25,8 +25,7 @@ public class QuizMapper {
                 quiz.getTestDate(),
                 quiz.getTestCount(),
                 quiz.getCorrect(),
-                quiz.getTestCount() - quiz.getCorrect(),
-                quiz.getDegree()
+                quiz.getTestCount() - quiz.getCorrect()
         );
     }
 
@@ -37,8 +36,7 @@ public class QuizMapper {
                 null,
                 quizDTO.getTestDate(),
                 quizDTO.getTestCount(),
-                quizDTO.getCorrect(),
-                quizDTO.getDegree()
+                quizDTO.getCorrect()
         );
     }
 
@@ -49,8 +47,7 @@ public class QuizMapper {
                 groupRepository.findById(quizDTO.getGroupId()).orElseThrow(() -> new NotFoundException("Gurux topilmadi")),
                 quizDTO.getQuizDate(),
                 quizDTO.getTestCount(),
-                quizDTO.getCorrectAnswer(),
-                quizDTO.getDegree()
+                quizDTO.getCorrectAnswer()
         );
     }
 

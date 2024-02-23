@@ -83,14 +83,9 @@ public class StudentServiceImpl implements StudentService {
             if (!userRepository.existsById(id)) {
                 throw new NotFoundException("Student not found");
             }
-            User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User user2 = userRepository.findById(id).get();
-            if (user1.equals(user2)) {
-                userRepository.deleteById(id);
-                return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Student deleted").build());
-            } else {
-                throw new NotFoundException("User not found");
-            }
+            userRepository.deleteById(id);
+            studentRepository.deleteById(id);
+            return ResponseEntity.ok(ApiResponse.builder().success(true).status(200).message("Student deleted").build());
         } catch (Exception e) {
             return ResponseEntity.status(300).body(ApiResponse.builder().success(false).status(300).message("Something is wrong").build());
         }

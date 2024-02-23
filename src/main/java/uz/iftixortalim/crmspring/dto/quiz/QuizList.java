@@ -18,7 +18,5 @@ public class QuizList {
     @NotNull
     private Integer testCount;
     @NotNull
-    private List<Status> status;
-    @NotNull
     private List<Test> tests;
 }

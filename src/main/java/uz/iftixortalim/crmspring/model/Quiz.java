@@ -25,5 +25,4 @@ public class Quiz {
     private LocalDate testDate;
     private Integer testCount;
     private Integer correct;
-    private String degree;
 }
