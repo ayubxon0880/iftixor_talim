@@ -63,6 +63,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                         AttendanceParent
                                 .builder()
                                 .date(localDate)
+                                .attendanceSmallDTO(attendances)
                                 .build()
                 )
         );
