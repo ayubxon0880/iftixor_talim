@@ -12,6 +12,7 @@ import uz.iftixortalim.crmspring.repository.TopicRepository;
 import uz.iftixortalim.crmspring.service.TopicService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -22,9 +23,9 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public ResponseEntity<Topic> getRandomTopic() {
         Random random = new Random();
-        long rand = random.nextLong(topicRepository.count())+1;
-        System.out.println(rand);
-        Topic topic = topicRepository.findById(rand).orElseThrow(() -> new NotFoundException("Savol topilmadi"));
+        List<Long> ids = topicRepository.findAllIds();
+        long rand = ids.get(random.nextInt(ids.size()));
+        Topic topic = topicRepository.findById(rand).orElseThrow(() -> new NotFoundException("Savol topilmadi qaytadan uringing"));
         return ResponseEntity.ok(topic);
     }
 
