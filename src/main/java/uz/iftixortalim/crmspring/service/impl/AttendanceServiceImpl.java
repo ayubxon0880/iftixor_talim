@@ -75,9 +75,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     public ResponseEntity<List<AttendanceBig>> readByStudentId(Long studentId, Long groupId, Integer year) {
         LocalDate first = LocalDate.of(year, Month.JANUARY, 1);
         LocalDate last = LocalDate.of(year, Month.DECEMBER, Month.DECEMBER.length(isLeapYear(year)));
-//        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group not found"));
-//        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndGroupInAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, List.of(group), first, last);
-        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId,first, last);
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group not found"));
+        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndGroupInAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId, List.of(group), first, last);
+//        List<Attendance> attendanceList = attendanceRepository.findAttendanceByStudentIdAndAttendanceDateBetweenOrderByAttendanceDateDesc(studentId,first, last);
 
         List<AttendanceBig> attendanceBigs = new ArrayList<>();
         Map<String, List<AttendanceSmall>> attendanceMap = new HashMap<>();

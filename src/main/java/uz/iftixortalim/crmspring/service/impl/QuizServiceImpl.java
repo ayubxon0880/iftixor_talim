@@ -63,19 +63,6 @@ public class QuizServiceImpl implements QuizService {
         List<Quiz> quizzes = new ArrayList<>();
         Group group = groupRepository.findById(quizList.getGroupId()).orElseThrow();
 
-//        for (Long key: testlar.keySet()) {
-//            Student student = studentRepository.findById(key).orElseThrow(() -> new NotFoundException("Student topilmadi"));
-//            Quiz quiz = new Quiz(
-//                    null,
-//                    student,
-//                    group,
-//                    LocalDate.now(ZoneId.of(ZONE)),
-//                    quizList.getTestCount(),
-//                    testlar.get(key)
-//            );
-//
-//            quizzes.add(quiz);
-//        }
         for (Student student: group.getStudents()) {
             Quiz quiz = new Quiz(
                     null,
