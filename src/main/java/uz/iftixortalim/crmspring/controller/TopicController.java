@@ -16,8 +16,8 @@ public class TopicController {
     private final TopicService topicService;
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> save(@RequestBody String topic){
-        return topicService.save(topic);
+    public ResponseEntity<ApiResponse> save(@RequestBody Topic topic){
+        return topicService.save(topic.getTopic());
     }
     @GetMapping("/random")
     public ResponseEntity<Topic> getRandomTopic(){
